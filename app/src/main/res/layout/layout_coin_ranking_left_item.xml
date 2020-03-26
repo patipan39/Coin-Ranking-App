@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/coinRankingLeftIcon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/margin16dp"
+        android:src="@mipmap/ic_launcher"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/coinRankingLeftTitle" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/coinRankingLeftTitle"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/margin16dp"
+        android:layout_marginTop="@dimen/margin16dp"
+        android:layout_marginEnd="@dimen/margin16dp"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:textColor="@android:color/black"
+        android:textSize="@dimen/sizeFont16sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/coinBankingLeftDescription"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/coinRankingLeftIcon"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="Bitcoin" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/coinBankingLeftDescription"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/margin16dp"
+        android:layout_marginTop="@dimen/margin8dp"
+        android:layout_marginEnd="@dimen/margin16dp"
+        android:layout_marginBottom="@dimen/margin16dp"
+        android:ellipsize="end"
+        android:maxLines="3"
+        android:textSize="@dimen/sizeFont14sp"
+        app:layout_constraintBottom_toTopOf="@+id/coinBankingLeftLineBottom"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/coinRankingLeftIcon"
+        app:layout_constraintTop_toBottomOf="@+id/coinRankingLeftTitle"
+        tools:text="Bitcoin is the first decentralized digital currency that can be sent through the internet globally without using financial..." />
+
+    <View
+        android:id="@+id/coinBankingLeftLineBottom"
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:layout_marginTop="@dimen/margin16dp"
+        android:background="@color/colorBackgroundGreyWhite"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/coinBankingLeftDescription" />
+</androidx.constraintlayout.widget.ConstraintLayout>
