@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="margin2dp">2dp</dimen>
+    <dimen name="margin4dp">4dp</dimen>
+    <dimen name="margin6dp">6dp</dimen>
+    <dimen name="margin8dp">8dp</dimen>
+    <dimen name="margin10dp">10dp</dimen>
+    <dimen name="margin12dp">12dp</dimen>
+    <dimen name="margin14dp">14dp</dimen>
+    <dimen name="margin16dp">16dp</dimen>
+
+    <dimen name="sizeFont2sp">2sp</dimen>
+    <dimen name="sizeFont4sp">4sp</dimen>
+    <dimen name="sizeFont6sp">6sp</dimen>
+    <dimen name="sizeFont8sp">8sp</dimen>
+    <dimen name="sizeFont12sp">12sp</dimen>
+    <dimen name="sizeFont14sp">14sp</dimen>
+    <dimen name="sizeFont16sp">16sp</dimen>
+    <dimen name="sizeFont18sp">18sp</dimen>
+    <dimen name="sizeFont20sp">20sp</dimen>
+    <dimen name="sizeFont22sp">22sp</dimen>
+</resources>

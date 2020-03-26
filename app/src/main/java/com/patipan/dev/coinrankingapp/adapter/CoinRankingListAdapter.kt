@@ -9,8 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.patipan.dev.coinrankingapp.R
 import java.lang.IllegalStateException
 
-class CoinRankingListAdapter :
-    ListAdapter<BaseCoinRankingAdapterData, RecyclerView.ViewHolder>(CoinRankingDiffCallBack()) {
+class CoinRankingListAdapter : ListAdapter<BaseCoinRankingAdapterData, RecyclerView.ViewHolder>(CoinRankingDiffCallBack()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return when (viewType) {
@@ -33,7 +32,15 @@ class CoinRankingListAdapter :
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+        when (holder) {
+            is CoinRankingLeftViewHolder -> {
+                holder.onBind()
+            }
 
+            is CoinRankingRightViewHolder -> {
+                holder.onBind()
+            }
+        }
     }
 
     override fun getItemViewType(position: Int): Int {
