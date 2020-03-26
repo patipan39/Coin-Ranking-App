@@ -9,7 +9,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.patipan.dev.coinrankingapp.R
 import java.lang.IllegalStateException
 
-class CoinRankingListAdapter : ListAdapter<BaseCoinRankingAdapterData, RecyclerView.ViewHolder>(CoinRankingDiffCallBack()) {
+class CoinRankingListAdapter :
+    ListAdapter<BaseCoinRankingAdapterData, RecyclerView.ViewHolder>(CoinRankingDiffCallBack()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return when (viewType) {
@@ -56,6 +57,12 @@ class CoinRankingListAdapter : ListAdapter<BaseCoinRankingAdapterData, RecyclerV
                 throw IllegalStateException("Con't getItemViewType in this ${this::class.java}")
             }
         }
+    }
+
+    fun addAllItem(listBaseData: ArrayList<BaseCoinRankingAdapterData>) {
+        val coinRankingList = arrayListOf<BaseCoinRankingAdapterData>()
+        coinRankingList.addAll(listBaseData)
+        submitList(coinRankingList)
     }
 
     inner class CoinRankingLeftViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
