@@ -10,6 +10,6 @@ interface CoinRankingService {
     @GET("v1/public/coins")
     fun getListCoinRanking(
         @Query("prefix") searchPrefix: String? = null,
-        @Query("offset") page: Int? = null
+        @Query("offset") page: Long? = null
     ): Call<CoinRankingResponse>
 }

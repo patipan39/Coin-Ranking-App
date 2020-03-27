@@ -1,5 +1,6 @@
 package com.patipan.dev.shared
 
+import android.util.Log
 import com.google.gson.JsonSyntaxException
 import com.patipan.dev.model.ErrorApiException
 import com.patipan.dev.model.ErrorException
@@ -36,6 +37,7 @@ fun <T, R> request(call: Call<T>, transform: (T) -> R, default: T): Either<Faile
                 Either.Right(transform((response.body() ?: default)))
             }
             else -> {
+                Log.d("callPagingError", response.message())
                 return try {
                     Either.Left(
                         ErrorApiException(response.errorBody())

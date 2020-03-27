@@ -6,5 +6,5 @@ import com.patipan.dev.model.Failed
 import com.patipan.dev.shared.Either
 
 interface ICoinRankingRemote {
-    fun getListCoinRanking(coinRangingRequest: CoinRankingRequest): Either<Failed, CoinRankingResponse>
+   suspend fun getListCoinRanking(coinRangingRequest: CoinRankingRequest): Either<Failed, CoinRankingResponse>
 }

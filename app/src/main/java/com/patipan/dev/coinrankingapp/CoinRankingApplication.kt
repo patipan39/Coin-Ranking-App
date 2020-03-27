@@ -1,6 +1,7 @@
 package com.patipan.dev.coinrankingapp
 
 import android.app.Application
+import com.facebook.stetho.Stetho
 import com.patipan.dev.shared.SharedModule
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
@@ -18,6 +19,7 @@ class CoinRankingApplication : Application() {
     override fun onCreate() {
         super.onCreate()
         setUpInjection()
+        Stetho.initializeWithDefaults(this)
     }
 
     private fun setUpInjection() {

@@ -3,14 +3,19 @@ package com.patipan.dev.coinrankingapp.adapter
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.paging.PagedList
+import androidx.paging.PagedListAdapter
 import androidx.recyclerview.widget.DiffUtil
-import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.patipan.dev.coinrankingapp.R
-import java.lang.IllegalStateException
+import com.patipan.dev.model.BaseCoinRankingAdapterData
+import com.patipan.dev.model.CoinRankingLeftData
+import com.patipan.dev.model.CoinRankingRightData
+import kotlinx.android.synthetic.main.layout_coin_ranking_left_item.view.*
+import kotlinx.android.synthetic.main.layout_coin_ranking_right_item.view.*
 
 class CoinRankingListAdapter :
-    ListAdapter<BaseCoinRankingAdapterData, RecyclerView.ViewHolder>(CoinRankingDiffCallBack()) {
+    PagedListAdapter<BaseCoinRankingAdapterData, RecyclerView.ViewHolder>(CoinRankingDiffCallBack()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return when (viewType) {
@@ -35,11 +40,13 @@ class CoinRankingListAdapter :
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when (holder) {
             is CoinRankingLeftViewHolder -> {
-                holder.onBind()
+                val itemLeft = getItem(position) as? CoinRankingLeftData
+                holder.onBind(itemLeft)
             }
 
             is CoinRankingRightViewHolder -> {
-                holder.onBind()
+                val itemRight = getItem(position) as? CoinRankingRightData
+                holder.onBind(itemRight)
             }
         }
     }
@@ -59,25 +66,31 @@ class CoinRankingListAdapter :
         }
     }
 
-    fun addAllItem(listBaseData: ArrayList<BaseCoinRankingAdapterData>) {
-        val coinRankingList = arrayListOf<BaseCoinRankingAdapterData>()
-        coinRankingList.addAll(listBaseData)
-        submitList(coinRankingList)
+    fun addAllItem(listBaseData: PagedList<BaseCoinRankingAdapterData>) {
+        submitList(listBaseData)
     }
 
     inner class CoinRankingLeftViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        fun onBind() {
-
+        fun onBind(itemLeft: CoinRankingLeftData?) {
+            itemLeft ?: return
+            itemView.apply {
+                coinRankingLeftTitle.text = itemLeft.name
+                coinRankingLeftDescription.text = itemLeft.description
+            }
         }
     }
 
     inner class CoinRankingRightViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        fun onBind() {
-
+        fun onBind(itemRight: CoinRankingRightData?) {
+            itemRight ?: return
+            itemView.apply {
+                coinRankingRightTitle.text = itemRight.name
+            }
         }
     }
 
-    class CoinRankingDiffCallBack : DiffUtil.ItemCallback<BaseCoinRankingAdapterData>() {
+    class CoinRankingDiffCallBack :
+        DiffUtil.ItemCallback<BaseCoinRankingAdapterData>() {
         override fun areItemsTheSame(
             oldItem: BaseCoinRankingAdapterData,
             newItem: BaseCoinRankingAdapterData
