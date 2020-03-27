@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -35,6 +36,10 @@ class CoinRankingFragment : BaseFragment() {
         coinRankingViewModel.observeMutableCoinItemList().observe(viewLifecycleOwner, Observer {
             coinRankingListAdapter.addAllItem(it)
         })
+
+        coinRankingViewModel.observeError()?.observe(viewLifecycleOwner, Observer {
+            Toast.makeText(context, it.throwable?.message.toString(), Toast.LENGTH_LONG).show()
+        })
     }
 
     private fun setUpRecyclerView() {
@@ -43,8 +48,6 @@ class CoinRankingFragment : BaseFragment() {
             itemAnimator = DefaultItemAnimator()
             adapter = coinRankingListAdapter
         }
-
-        coinRankingViewModel.setCoinRankingItemList()
     }
 
     companion object {

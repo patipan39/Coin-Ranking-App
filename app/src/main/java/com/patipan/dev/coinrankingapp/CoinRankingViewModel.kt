@@ -1,21 +1,34 @@
 package com.patipan.dev.coinrankingapp
 
-import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
-import com.patipan.dev.coinrankingapp.adapter.BaseCoinRankingAdapterData
-import com.patipan.dev.coinrankingapp.adapter.CoinRankingLeftData
-import com.patipan.dev.coinrankingapp.adapter.CoinRankingRightData
+import androidx.paging.LivePagedListBuilder
+import androidx.paging.PagedList
+import com.patipan.dev.model.BaseCoinRankingAdapterData
+import com.patipan.dev.model.CoinRankingRequest
+import com.patipan.dev.shared.domain.CoinRankingUseCase
+import com.patipan.dev.shared.pagination.CoinRankingDataSourceFactory
 
-class CoinRankingViewModel : ViewModel() {
-    private val listBaseCoinItemAdapter = arrayListOf<BaseCoinRankingAdapterData>()
-    private val mutableCoinLiveData = MutableLiveData<ArrayList<BaseCoinRankingAdapterData>>()
+class CoinRankingViewModel(
+    useCase: CoinRankingUseCase
+) : ViewModel() {
 
-    fun setCoinRankingItemList() {
-        listBaseCoinItemAdapter.add(CoinRankingLeftData(2))
-        listBaseCoinItemAdapter.add(CoinRankingRightData(1))
+    private val pageSize: Int = 10
+    private val coinRankingList: LiveData<PagedList<BaseCoinRankingAdapterData>>
+    private val coinRankingRequest: CoinRankingRequest
+    private val dataSourceFactory: CoinRankingDataSourceFactory
 
-        mutableCoinLiveData.value = listBaseCoinItemAdapter
+    init {
+        val config = PagedList.Config.Builder()
+            .setPageSize(pageSize)
+            .setInitialLoadSizeHint(pageSize * 2)
+            .build()
+
+        coinRankingRequest = CoinRankingRequest(page = 0)
+        dataSourceFactory = CoinRankingDataSourceFactory(useCase, coinRankingRequest)
+        coinRankingList = LivePagedListBuilder(dataSourceFactory, config).build()
     }
 
-    fun observeMutableCoinItemList() = mutableCoinLiveData
+    fun observeError() = dataSourceFactory.mutableDataSource.value?.errorMutable
+    fun observeMutableCoinItemList() = coinRankingList
 }

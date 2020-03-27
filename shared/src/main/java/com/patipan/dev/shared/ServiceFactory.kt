@@ -1,5 +1,6 @@
 package com.patipan.dev.shared
 
+import com.facebook.stetho.okhttp3.StethoInterceptor
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.patipan.dev.shared.service.CoinRankingService
@@ -18,9 +19,10 @@ object ServiceFactory {
             .build().create(CoinRankingService::class.java)
     }
 
-    fun createOkHttpClient(): OkHttpClient {
+    private fun createOkHttpClient(): OkHttpClient {
         return OkHttpClient.Builder()
             .addInterceptor(createInterceptor())
+            .addNetworkInterceptor(StethoInterceptor())
             .connectTimeout(30, TimeUnit.SECONDS)
             .readTimeout(30, TimeUnit.SECONDS)
             .writeTimeout(30, TimeUnit.SECONDS)
@@ -29,7 +31,9 @@ object ServiceFactory {
 
     private fun createInterceptor(): Interceptor {
         return Interceptor {
-            val request = it.request().newBuilder().build()
+            val request = it.request().newBuilder()
+                .addHeader("Content-Type", "application/json")
+                .build()
             it.proceed(request)
         }
     }

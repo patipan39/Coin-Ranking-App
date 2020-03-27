@@ -8,7 +8,7 @@ import com.patipan.dev.shared.data.CoinRankingRemoteImpl
 import com.patipan.dev.shared.data.ICoinRankingRepository
 
 class CoinRankingRepositoryImpl(private val remote: CoinRankingRemoteImpl) : ICoinRankingRepository {
-    override fun getListCoinRanking(coinRangingRequest: CoinRankingRequest): Either<Failed, CoinRankingResponse> {
+    override suspend fun getListCoinRanking(coinRangingRequest: CoinRankingRequest): Either<Failed, CoinRankingResponse> {
         return remote.getListCoinRanking(coinRangingRequest)
     }
 }
