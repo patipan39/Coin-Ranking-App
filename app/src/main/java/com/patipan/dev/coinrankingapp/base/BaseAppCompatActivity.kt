@@ -1,4 +1,4 @@
-package com.patipan.dev.coinrankingapp
+package com.patipan.dev.coinrankingapp.base
 
 import androidx.appcompat.app.AppCompatActivity
 

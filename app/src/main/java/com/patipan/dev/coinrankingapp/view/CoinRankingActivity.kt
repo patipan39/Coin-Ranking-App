@@ -1,6 +1,8 @@
-package com.patipan.dev.coinrankingapp
+package com.patipan.dev.coinrankingapp.view
 
 import android.os.Bundle
+import com.patipan.dev.coinrankingapp.R
+import com.patipan.dev.coinrankingapp.base.BaseAppCompatActivity
 
 class CoinRankingActivity : BaseAppCompatActivity() {
 
@@ -8,10 +10,10 @@ class CoinRankingActivity : BaseAppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_coin_ranking)
 
-        savedInstanceState ?: run {
-            replaceFragment()
-        }
+        replaceFragment()
     }
+
+
 
     private fun replaceFragment() {
         supportFragmentManager.beginTransaction().replace(

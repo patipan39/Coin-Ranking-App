@@ -7,12 +7,16 @@
 
     <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/coinRankingLeftIcon"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
         android:layout_marginStart="@dimen/margin16dp"
         android:src="@mipmap/ic_launcher"
+        app:layout_constraintBottom_toBottomOf="@+id/coinRankingLeftDescription"
+        app:layout_constraintEnd_toStartOf="@+id/coinRankingLeftTitle"
+        app:layout_constraintHorizontal_weight="0.15"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/coinRankingLeftTitle" />
+        app:layout_constraintTop_toTopOf="@+id/coinRankingLeftTitle"
+        app:layout_constraintVertical_bias="0" />
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/coinRankingLeftTitle"
@@ -26,14 +30,15 @@
         android:textColor="@android:color/black"
         android:textSize="@dimen/sizeFont16sp"
         android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@+id/coinBankingLeftDescription"
+        app:layout_constraintBottom_toTopOf="@+id/coinRankingLeftDescription"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_weight="0.5"
         app:layout_constraintStart_toEndOf="@id/coinRankingLeftIcon"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="Bitcoin" />
 
     <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/coinBankingLeftDescription"
+        android:id="@+id/coinRankingLeftDescription"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/margin16dp"
@@ -57,5 +62,5 @@
         android:background="@color/colorBackgroundGreyWhite"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/coinBankingLeftDescription" />
+        app:layout_constraintTop_toBottomOf="@+id/coinRankingLeftDescription" />
 </androidx.constraintlayout.widget.ConstraintLayout>

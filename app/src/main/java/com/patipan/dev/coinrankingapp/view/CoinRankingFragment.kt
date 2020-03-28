@@ -1,14 +1,18 @@
-package com.patipan.dev.coinrankingapp
+package com.patipan.dev.coinrankingapp.view
 
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.patipan.dev.coinrankingapp.view.viewmodel.CoinRankingViewModel
+import com.patipan.dev.coinrankingapp.R
 import com.patipan.dev.coinrankingapp.adapter.CoinRankingListAdapter
+import com.patipan.dev.coinrankingapp.base.BaseFragment
 import kotlinx.android.synthetic.main.coin_ranking_fragment.*
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -29,11 +33,24 @@ class CoinRankingFragment : BaseFragment() {
         super.onViewCreated(view, savedInstanceState)
         observeLiveData()
         setUpRecyclerView()
+        setUpSwipeRefresh()
+    }
+
+    private fun setUpSwipeRefresh() {
+        coinRankingSwipeRefreshing.setOnRefreshListener {
+            setEnableSwipeRefreshing(coinRankingSwipeRefreshing.isRefreshing)
+        }
     }
 
     private fun observeLiveData() {
         coinRankingViewModel.observeMutableCoinItemList().observe(viewLifecycleOwner, Observer {
+            setEnableSwipeRefreshing(coinRankingSwipeRefreshing.isRefreshing)
+
             coinRankingListAdapter.addAllItem(it)
+        })
+
+        coinRankingViewModel.observeError()?.observe(viewLifecycleOwner, Observer {
+            Toast.makeText(context, it.throwable?.message.toString(), Toast.LENGTH_LONG).show()
         })
     }
 
@@ -43,13 +60,16 @@ class CoinRankingFragment : BaseFragment() {
             itemAnimator = DefaultItemAnimator()
             adapter = coinRankingListAdapter
         }
+    }
 
-        coinRankingViewModel.setCoinRankingItemList()
+    private fun setEnableSwipeRefreshing(isRefreshing: Boolean) {
+        if (isRefreshing) coinRankingSwipeRefreshing.isRefreshing = !isRefreshing
     }
 
     companion object {
         const val tagFragment: String = "coinRankingFragment"
         fun newInstance(): CoinRankingFragment =
-            CoinRankingFragment().apply { arguments = Bundle() }
+            CoinRankingFragment()
+                .apply { arguments = Bundle() }
     }
 }

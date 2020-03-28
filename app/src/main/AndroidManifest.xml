@@ -2,6 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.patipan.dev.coinrankingapp">
 
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <application
         android:name=".CoinRankingApplication"
         android:allowBackup="true"
@@ -10,7 +12,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".CoinRankingActivity">
+        <meta-data android:name="com.patipan.dev.coinrankingapp.glide.SvgModule" android:value="AppGlideModule"/>
+
+        <activity android:name=".view.CoinRankingActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
