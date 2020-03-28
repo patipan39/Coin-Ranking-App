@@ -80,7 +80,7 @@ class CoinRankingListAdapter :
         fun onBind(itemLeft: CoinRankingLeftData?) {
             itemLeft ?: return
             itemView.apply {
-                loadImageWithFresco(
+                loadImageWithGlide(
                     context,
                     itemLeft.imageUrl,
                     coinRankingLeftIcon
@@ -96,7 +96,7 @@ class CoinRankingListAdapter :
         fun onBind(itemRight: CoinRankingRightData?) {
             itemRight ?: return
             itemView.apply {
-                loadImageWithFresco(
+                loadImageWithGlide(
                     context,
                     itemRight.imageUrl,
                     coinRankingRightIcon
@@ -106,7 +106,7 @@ class CoinRankingListAdapter :
         }
     }
 
-    private fun loadImageWithFresco(context: Context, photoUrl: String?, view: AppCompatImageView) {
+    private fun loadImageWithGlide(context: Context, photoUrl: String?, view: AppCompatImageView) {
         val requestBuilder =
             GlideApp.with(context).`as`(PictureDrawable::class.java)
                 .listener(SvgSoftwareLayerSetter())
@@ -128,7 +128,19 @@ class CoinRankingListAdapter :
             oldItem: BaseCoinRankingAdapterData,
             newItem: BaseCoinRankingAdapterData
         ): Boolean {
-            return false
+            return when {
+                oldItem is CoinRankingLeftData && newItem is CoinRankingLeftData -> {
+                    oldItem.itemId == newItem.itemId
+                }
+
+                oldItem is CoinRankingRightData && newItem is CoinRankingRightData -> {
+                    oldItem.itemId == newItem.itemId
+                }
+
+                else -> {
+                    true
+                }
+            }
         }
     }
 
