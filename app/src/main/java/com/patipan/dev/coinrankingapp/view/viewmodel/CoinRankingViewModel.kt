@@ -34,6 +34,12 @@ class CoinRankingViewModel(
         coinRankingList.value?.dataSource?.invalidate()
     }
 
+    fun searchCoinRanking(wording: String) {
+        coinRankingRequest.searchInList = if (wording.isEmpty()) null else wording
+        coinRankingRequest.page = 0
+        coinRankingList.value?.dataSource?.invalidate()
+    }
+
     fun observeError() = dataSourceFactory.mutableDataSource.value?.errorMutable
     fun observeMutableCoinItemList() = coinRankingList
 }

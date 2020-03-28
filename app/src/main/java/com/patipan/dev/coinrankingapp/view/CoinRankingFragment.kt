@@ -4,15 +4,16 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.EditorInfo
 import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.patipan.dev.coinrankingapp.view.viewmodel.CoinRankingViewModel
 import com.patipan.dev.coinrankingapp.R
 import com.patipan.dev.coinrankingapp.adapter.CoinRankingListAdapter
 import com.patipan.dev.coinrankingapp.base.BaseFragment
+import com.patipan.dev.coinrankingapp.view.viewmodel.CoinRankingViewModel
 import kotlinx.android.synthetic.main.coin_ranking_fragment.*
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -34,24 +35,17 @@ class CoinRankingFragment : BaseFragment() {
         observeLiveData()
         setUpRecyclerView()
         setUpSwipeRefresh()
+        setUpSearchEditText()
     }
 
-    private fun setUpSwipeRefresh() {
-        coinRankingSwipeRefreshing.setOnRefreshListener {
-            setEnableSwipeRefreshing(coinRankingSwipeRefreshing.isRefreshing)
+    private fun setUpSearchEditText() {
+        coinRankingSearchEd.setOnEditorActionListener { editTextSearch, actionId, _ ->
+            val wording = coinRankingSearchEd.text.toString()
+            coinRankingViewModel.searchCoinRanking(wording)
+            editTextSearch.clearFocus()
+
+            actionId == EditorInfo.IME_ACTION_SEARCH
         }
-    }
-
-    private fun observeLiveData() {
-        coinRankingViewModel.observeMutableCoinItemList().observe(viewLifecycleOwner, Observer {
-            setEnableSwipeRefreshing(coinRankingSwipeRefreshing.isRefreshing)
-
-            coinRankingListAdapter.addAllItem(it)
-        })
-
-        coinRankingViewModel.observeError()?.observe(viewLifecycleOwner, Observer {
-            Toast.makeText(context, it.throwable?.message.toString(), Toast.LENGTH_LONG).show()
-        })
     }
 
     private fun setUpRecyclerView() {
@@ -60,6 +54,24 @@ class CoinRankingFragment : BaseFragment() {
             itemAnimator = DefaultItemAnimator()
             adapter = coinRankingListAdapter
         }
+    }
+
+    private fun setUpSwipeRefresh() {
+        coinRankingSwipeRefreshing.setOnRefreshListener {
+            val isRefreshing = coinRankingSwipeRefreshing.isRefreshing
+            if (isRefreshing) coinRankingViewModel.refreshingData()
+        }
+    }
+
+    private fun observeLiveData() {
+        coinRankingViewModel.observeMutableCoinItemList().observe(viewLifecycleOwner, Observer {
+            setEnableSwipeRefreshing(coinRankingSwipeRefreshing.isRefreshing)
+            coinRankingListAdapter.addAllItem(it)
+        })
+
+        coinRankingViewModel.observeError()?.observe(viewLifecycleOwner, Observer {
+            Toast.makeText(context, it.throwable?.message.toString(), Toast.LENGTH_LONG).show()
+        })
     }
 
     private fun setEnableSwipeRefreshing(isRefreshing: Boolean) {

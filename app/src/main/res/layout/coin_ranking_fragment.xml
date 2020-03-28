@@ -6,14 +6,49 @@
     android:layout_height="match_parent"
     tools:context=".view.CoinRankingFragment">
 
+
+    <androidx.appcompat.widget.AppCompatEditText
+        android:id="@+id/coinRankingSearchEd"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/margin16dp"
+        android:layout_marginTop="@dimen/margin20dp"
+        android:layout_marginEnd="@dimen/margin16dp"
+        android:background="@drawable/shape_bg_coin_search_ed"
+        android:descendantFocusability="afterDescendants"
+        android:drawableStart="@drawable/ic_search"
+        android:drawablePadding="@dimen/padding16dp"
+        android:hint="@string/coin_ranking_search_hint"
+        android:inputType="text"
+        android:textColor="@android:color/black"
+        android:imeOptions="actionSearch"
+        android:paddingStart="@dimen/padding16dp"
+        android:paddingEnd="@dimen/padding0dp"
+        android:textSize="@dimen/sizeFont14sp"
+        app:layout_constraintBottom_toTopOf="@+id/coinRankingSearchLineBottom"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <View
+        android:id="@+id/coinRankingSearchLineBottom"
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:layout_marginTop="@dimen/margin20dp"
+        android:background="@color/colorBackgroundGreyWhite"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/coinRankingSearchEd" />
+
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/coinRankingSwipeRefreshing"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toBottomOf="@+id/coinRankingSearchLineBottom">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/coinRankingList"
@@ -21,4 +56,5 @@
             android:layout_height="match_parent" />
 
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
 </androidx.constraintlayout.widget.ConstraintLayout>
