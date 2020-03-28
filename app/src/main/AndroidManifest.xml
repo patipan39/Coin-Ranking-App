@@ -14,7 +14,7 @@
         android:theme="@style/AppTheme">
         <meta-data android:name="com.patipan.dev.coinrankingapp.glide.SvgModule" android:value="AppGlideModule"/>
 
-        <activity android:name=".CoinRankingActivity">
+        <activity android:name=".view.CoinRankingActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
