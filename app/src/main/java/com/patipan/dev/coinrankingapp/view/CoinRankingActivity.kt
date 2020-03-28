@@ -10,9 +10,10 @@ class CoinRankingActivity : BaseAppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_coin_ranking)
 
-        replaceFragment()
+        savedInstanceState ?: run {
+            replaceFragment()
+        }
     }
-
 
 
     private fun replaceFragment() {

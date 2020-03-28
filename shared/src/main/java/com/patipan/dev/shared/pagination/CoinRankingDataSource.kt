@@ -15,7 +15,6 @@ class CoinRankingDataSource(
     PageKeyedDataSource<Long, BaseCoinRankingAdapterData>() {
 
     private val coinRankingListItem = arrayListOf<BaseCoinRankingAdapterData>()
-
     val errorMutable: MutableLiveData<Failed> = MutableLiveData()
 
     override fun loadInitial(
@@ -26,6 +25,7 @@ class CoinRankingDataSource(
             return@runBlocking when (val response = useCase.run(coinRankingRequest)) {
                 is Either.Right -> {
                     val state = response.right.data?.state
+
                     response.right.data?.coin?.mapIndexed { index, coinData ->
                         mapperItem(
                             index,
@@ -58,6 +58,7 @@ class CoinRankingDataSource(
                 is Either.Right -> {
                     val state = response.right.data?.state
                     coinRankingRequest.page = state?.offset?.plus(1)?.toLong()
+
                     if (coinRankingRequest.page?.toInt() ?: 0 >= state?.limit ?: 0) return@runBlocking
 
                     response.right.data?.coin?.mapIndexed { index, coinData ->
@@ -66,6 +67,7 @@ class CoinRankingDataSource(
                             coinData
                         )
                     }
+
                     callback.onResult(
                         coinRankingListItem,
                         state?.offset?.plus(1)?.toLong()
@@ -88,15 +90,15 @@ class CoinRankingDataSource(
 
     private fun mapperItem(index: Int, coinRankingResponseDataCoin: CoinRankingResponseDataCoin) {
         val firstStartIndex = index + 1
-        if (firstStartIndex <= 5) {
-            val indexIsFirstGroup = abs(firstStartIndex - 5) == 0
-            val baseCoinRankingAdapterData = if (indexIsFirstGroup) {
+        val baseCoinRankingAdapterData =
+            if (firstStartIndex <= 5 && abs(firstStartIndex - 5) == 0 || firstStartIndex > 5 && firstStartIndex % 5 == 0) {
                 CoinRankingRightData(
                     coinRankingResponseDataCoin.id,
                     coinRankingResponseDataCoin.name,
                     coinRankingResponseDataCoin.description,
                     coinRankingResponseDataCoin.iconUrl
                 )
+
             } else {
                 CoinRankingLeftData(
                     coinRankingResponseDataCoin.id,
@@ -105,24 +107,6 @@ class CoinRankingDataSource(
                     coinRankingResponseDataCoin.iconUrl
                 )
             }
-            coinRankingListItem.add(baseCoinRankingAdapterData)
-        } else {
-            val baseCoinRankingAdapterData = if (firstStartIndex % 5 == 0) {
-                CoinRankingRightData(
-                    coinRankingResponseDataCoin.id,
-                    coinRankingResponseDataCoin.name,
-                    coinRankingResponseDataCoin.description,
-                    coinRankingResponseDataCoin.iconUrl
-                )
-            } else {
-                CoinRankingLeftData(
-                    coinRankingResponseDataCoin.id,
-                    coinRankingResponseDataCoin.name,
-                    coinRankingResponseDataCoin.description,
-                    coinRankingResponseDataCoin.iconUrl
-                )
-            }
-            coinRankingListItem.add(baseCoinRankingAdapterData)
-        }
+        coinRankingListItem.add(baseCoinRankingAdapterData)
     }
 }

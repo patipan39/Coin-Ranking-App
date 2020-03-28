@@ -19,6 +19,7 @@ import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class CoinRankingFragment : BaseFragment() {
+
     private val coinRankingListAdapter: CoinRankingListAdapter by inject()
     private val coinRankingViewModel: CoinRankingViewModel by viewModel()
 
@@ -32,20 +33,11 @@ class CoinRankingFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
         observeLiveData()
         setUpRecyclerView()
         setUpSwipeRefresh()
         setUpSearchEditText()
-    }
-
-    private fun setUpSearchEditText() {
-        coinRankingSearchEd.setOnEditorActionListener { editTextSearch, actionId, _ ->
-            val wording = coinRankingSearchEd.text.toString()
-            coinRankingViewModel.searchCoinRanking(wording)
-            editTextSearch.clearFocus()
-
-            actionId == EditorInfo.IME_ACTION_SEARCH
-        }
     }
 
     private fun setUpRecyclerView() {
@@ -78,10 +70,23 @@ class CoinRankingFragment : BaseFragment() {
         if (isRefreshing) coinRankingSwipeRefreshing.isRefreshing = !isRefreshing
     }
 
+    private fun setUpSearchEditText() {
+        coinRankingSearchEd.setOnEditorActionListener { _, actionId, _ ->
+            val wording = coinRankingSearchEd.text.toString()
+            coinRankingViewModel.searchCoinRanking(wording)
+            coinRankingSearchEd.hideKeyBoard()
+
+            actionId == EditorInfo.IME_ACTION_SEARCH
+        }
+    }
+
+
     companion object {
         const val tagFragment: String = "coinRankingFragment"
         fun newInstance(): CoinRankingFragment =
             CoinRankingFragment()
                 .apply { arguments = Bundle() }
     }
+
+
 }
