@@ -1,6 +1,8 @@
-package com.patipan.dev.coinrankingapp
+package com.patipan.dev.coinrankingapp.view
 
 import android.os.Bundle
+import com.patipan.dev.coinrankingapp.R
+import com.patipan.dev.coinrankingapp.base.BaseAppCompatActivity
 
 class CoinRankingActivity : BaseAppCompatActivity() {
 

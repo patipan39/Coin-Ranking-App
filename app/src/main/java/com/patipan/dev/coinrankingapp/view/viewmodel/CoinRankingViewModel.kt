@@ -1,4 +1,4 @@
-package com.patipan.dev.coinrankingapp
+package com.patipan.dev.coinrankingapp.view.viewmodel
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel

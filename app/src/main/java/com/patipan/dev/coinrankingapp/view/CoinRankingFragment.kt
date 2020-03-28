@@ -1,4 +1,4 @@
-package com.patipan.dev.coinrankingapp
+package com.patipan.dev.coinrankingapp.view
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -9,7 +9,10 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.patipan.dev.coinrankingapp.view.viewmodel.CoinRankingViewModel
+import com.patipan.dev.coinrankingapp.R
 import com.patipan.dev.coinrankingapp.adapter.CoinRankingListAdapter
+import com.patipan.dev.coinrankingapp.base.BaseFragment
 import kotlinx.android.synthetic.main.coin_ranking_fragment.*
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -35,15 +38,13 @@ class CoinRankingFragment : BaseFragment() {
 
     private fun setUpSwipeRefresh() {
         coinRankingSwipeRefreshing.setOnRefreshListener {
-            val isRefreshing = coinRankingSwipeRefreshing.isRefreshing
-            setEnableSwipeRefreshing(isRefreshing)
+            setEnableSwipeRefreshing(coinRankingSwipeRefreshing.isRefreshing)
         }
     }
 
     private fun observeLiveData() {
         coinRankingViewModel.observeMutableCoinItemList().observe(viewLifecycleOwner, Observer {
-            val isRefreshing = coinRankingSwipeRefreshing.isRefreshing
-            setEnableSwipeRefreshing(isRefreshing)
+            setEnableSwipeRefreshing(coinRankingSwipeRefreshing.isRefreshing)
 
             coinRankingListAdapter.addAllItem(it)
         })
@@ -68,6 +69,7 @@ class CoinRankingFragment : BaseFragment() {
     companion object {
         const val tagFragment: String = "coinRankingFragment"
         fun newInstance(): CoinRankingFragment =
-            CoinRankingFragment().apply { arguments = Bundle() }
+            CoinRankingFragment()
+                .apply { arguments = Bundle() }
     }
 }
