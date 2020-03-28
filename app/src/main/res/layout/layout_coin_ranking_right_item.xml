@@ -7,20 +7,39 @@
 
     <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/coinRankingRightIcon"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
         android:layout_marginTop="@dimen/margin16dp"
         android:layout_marginEnd="@dimen/margin16dp"
-        android:layout_marginBottom="@dimen/margin16dp"
-        app:layout_constraintBottom_toTopOf="@+id/coinRankingRightLineBottom"
+        app:layout_constraintBottom_toBottomOf="@+id/coinRankingRightDescription"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_weight="0.15"
+        app:layout_constraintStart_toEndOf="@+id/coinRankingRightMessage"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@mipmap/ic_launcher" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/coinRankingRightMessage"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/margin16dp"
+        android:layout_marginEnd="@dimen/margin16dp"
+        android:gravity="end"
+        android:textColor="@android:color/black"
+        android:textSize="@dimen/sizeFont16sp"
+        android:textStyle="bold"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toTopOf="@+id/coinRankingRightDescription"
+        app:layout_constraintEnd_toStartOf="@+id/coinRankingRightIcon"
+        app:layout_constraintHorizontal_weight="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/coinRankingRightIcon" />
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/coinRankingRightTitle"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/margin16dp"
         android:layout_marginEnd="@dimen/margin16dp"
         android:gravity="end"
         android:textColor="@android:color/black"
@@ -28,9 +47,28 @@
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="@+id/coinRankingRightIcon"
         app:layout_constraintEnd_toStartOf="@+id/coinRankingRightIcon"
+        app:layout_constraintHorizontal_weight="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/coinRankingRightIcon"
         tools:text="Bitcoin" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/coinRankingRightDescription"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/margin16dp"
+        android:layout_marginTop="@dimen/margin8dp"
+        android:layout_marginEnd="@dimen/margin16dp"
+        android:ellipsize="end"
+        android:lines="3"
+        android:textSize="@dimen/sizeFont14sp"
+        android:textStyle="bold"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toTopOf="@+id/coinRankingRightLineBottom"
+        app:layout_constraintEnd_toStartOf="@+id/coinRankingRightIcon"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/coinRankingRightMessage"
+        app:layout_constraintVertical_chainStyle="packed" />
 
     <View
         android:id="@+id/coinRankingRightLineBottom"
@@ -40,5 +78,5 @@
         android:background="@color/colorBackgroundGreyWhite"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/coinRankingRightIcon" />
+        app:layout_constraintTop_toBottomOf="@+id/coinRankingRightDescription" />
 </androidx.constraintlayout.widget.ConstraintLayout>

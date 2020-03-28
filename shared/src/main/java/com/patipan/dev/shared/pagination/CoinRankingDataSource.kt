@@ -1,6 +1,5 @@
 package com.patipan.dev.shared.pagination
 
-import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.paging.PageKeyedDataSource
 import com.patipan.dev.model.*
@@ -27,49 +26,16 @@ class CoinRankingDataSource(
             return@runBlocking when (val response = useCase.run(coinRankingRequest)) {
                 is Either.Right -> {
                     val state = response.right.data?.state
-
-                    response.right.data?.coin?.mapIndexed { index, coinRankingResponseDataCoin ->
-                        val firstStartIndex = index + 1
-                        if (firstStartIndex <= 5) {
-                            val indexIsFirstGroup = abs(firstStartIndex - 5) == 0
-                            val baseCoinRankingAdapterData = if (indexIsFirstGroup) {
-                                CoinRankingRightData(
-                                    coinRankingResponseDataCoin.id,
-                                    coinRankingResponseDataCoin.name,
-                                    coinRankingResponseDataCoin.description,
-                                    coinRankingResponseDataCoin.iconUrl
-                                )
-                            } else {
-                                CoinRankingLeftData(coinRankingResponseDataCoin.id,
-                                    coinRankingResponseDataCoin.name,
-                                    coinRankingResponseDataCoin.description,
-                                    coinRankingResponseDataCoin.iconUrl)
-                            }
-                            coinRankingListItem.add(baseCoinRankingAdapterData)
-                        } else {
-                            val baseCoinRankingAdapterData = if (firstStartIndex % 5 == 0) {
-                                CoinRankingRightData(
-                                    coinRankingResponseDataCoin.id,
-                                    coinRankingResponseDataCoin.name,
-                                    coinRankingResponseDataCoin.description,
-                                    coinRankingResponseDataCoin.iconUrl
-                                )
-                            } else {
-                                CoinRankingLeftData(coinRankingResponseDataCoin.id,
-                                    coinRankingResponseDataCoin.name,
-                                    coinRankingResponseDataCoin.description,
-                                    coinRankingResponseDataCoin.iconUrl)
-                            }
-                            coinRankingListItem.add(baseCoinRankingAdapterData)
-                        }
+                    response.right.data?.coin?.mapIndexed { index, coinData ->
+                        mapperItem(
+                            index,
+                            coinData
+                        )
                     }
-
-                    coinRankingRequest.page?.plus(1)
-
                     callback.onResult(
                         coinRankingListItem,
                         state?.offset?.minus(1)?.toLong(),
-                        coinRankingRequest.page
+                        coinRankingRequest.page?.plus(1)
                     )
                 }
 
@@ -84,7 +50,30 @@ class CoinRankingDataSource(
         params: LoadParams<Long>,
         callback: LoadCallback<Long, BaseCoinRankingAdapterData>
     ) {
+        runBlocking {
+            coinRankingRequest.page = coinRankingRequest.page?.plus(1)
+            return@runBlocking when (val response = useCase.run(coinRankingRequest)) {
+                is Either.Right -> {
+                    val state = response.right.data?.state
+                    if (coinRankingRequest.page?.toInt() ?: 0 >= state?.limit ?: 0) return@runBlocking
 
+                    response.right.data?.coin?.mapIndexed { index, coinData ->
+                        mapperItem(
+                            index,
+                            coinData
+                        )
+                    }
+                    callback.onResult(
+                        coinRankingListItem,
+                        state?.offset?.minus(1)?.toLong()
+                    )
+                }
+
+                is Either.Left -> {
+                    errorMutable.postValue(response.left)
+                }
+            }
+        }
     }
 
     override fun loadBefore(
@@ -92,5 +81,45 @@ class CoinRankingDataSource(
         callback: LoadCallback<Long, BaseCoinRankingAdapterData>
     ) {
         //Nothing
+    }
+
+    private fun mapperItem(index: Int, coinRankingResponseDataCoin: CoinRankingResponseDataCoin) {
+        val firstStartIndex = index + 1
+        if (firstStartIndex <= 5) {
+            val indexIsFirstGroup = abs(firstStartIndex - 5) == 0
+            val baseCoinRankingAdapterData = if (indexIsFirstGroup) {
+                CoinRankingRightData(
+                    coinRankingResponseDataCoin.id,
+                    coinRankingResponseDataCoin.name,
+                    coinRankingResponseDataCoin.description,
+                    coinRankingResponseDataCoin.iconUrl
+                )
+            } else {
+                CoinRankingLeftData(
+                    coinRankingResponseDataCoin.id,
+                    coinRankingResponseDataCoin.name,
+                    coinRankingResponseDataCoin.description,
+                    coinRankingResponseDataCoin.iconUrl
+                )
+            }
+            coinRankingListItem.add(baseCoinRankingAdapterData)
+        } else {
+            val baseCoinRankingAdapterData = if (firstStartIndex % 5 == 0) {
+                CoinRankingRightData(
+                    coinRankingResponseDataCoin.id,
+                    coinRankingResponseDataCoin.name,
+                    coinRankingResponseDataCoin.description,
+                    coinRankingResponseDataCoin.iconUrl
+                )
+            } else {
+                CoinRankingLeftData(
+                    coinRankingResponseDataCoin.id,
+                    coinRankingResponseDataCoin.name,
+                    coinRankingResponseDataCoin.description,
+                    coinRankingResponseDataCoin.iconUrl
+                )
+            }
+            coinRankingListItem.add(baseCoinRankingAdapterData)
+        }
     }
 }
