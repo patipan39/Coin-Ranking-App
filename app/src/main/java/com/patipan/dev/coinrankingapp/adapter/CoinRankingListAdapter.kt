@@ -1,13 +1,20 @@
 package com.patipan.dev.coinrankingapp.adapter
 
+import android.content.Context
+import android.graphics.drawable.PictureDrawable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.widget.AppCompatImageView
 import androidx.paging.PagedList
 import androidx.paging.PagedListAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
 import com.patipan.dev.coinrankingapp.R
+import com.patipan.dev.coinrankingapp.glide.GlideApp
+import com.patipan.dev.coinrankingapp.glide.SvgSoftwareLayerSetter
 import com.patipan.dev.model.BaseCoinRankingAdapterData
 import com.patipan.dev.model.CoinRankingLeftData
 import com.patipan.dev.model.CoinRankingRightData
@@ -74,6 +81,12 @@ class CoinRankingListAdapter :
         fun onBind(itemLeft: CoinRankingLeftData?) {
             itemLeft ?: return
             itemView.apply {
+                loadImageWithFresco(
+                    context,
+                    itemLeft.imageUrl,
+                    coinRankingLeftIcon
+                )
+
                 coinRankingLeftTitle.text = itemLeft.name
                 coinRankingLeftDescription.text = itemLeft.description
             }
@@ -84,9 +97,23 @@ class CoinRankingListAdapter :
         fun onBind(itemRight: CoinRankingRightData?) {
             itemRight ?: return
             itemView.apply {
+                loadImageWithFresco(
+                    context,
+                    itemRight.imageUrl,
+                    coinRankingRightIcon
+                )
                 coinRankingRightTitle.text = itemRight.name
             }
         }
+    }
+
+    private fun loadImageWithFresco(context: Context, photoUrl: String?, view: AppCompatImageView) {
+        val requestBuilder =
+            GlideApp.with(context).`as`(PictureDrawable::class.java)
+                .listener(SvgSoftwareLayerSetter())
+
+        val requestOptions = RequestOptions().circleCrop()
+        requestBuilder.load(photoUrl).apply(requestOptions).into(view)
     }
 
     class CoinRankingDiffCallBack :
