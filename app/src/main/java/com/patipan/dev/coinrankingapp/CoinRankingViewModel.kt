@@ -29,6 +29,11 @@ class CoinRankingViewModel(
         coinRankingList = LivePagedListBuilder(dataSourceFactory, config).build()
     }
 
+    fun refreshingData() {
+        coinRankingRequest.page = 0
+        coinRankingList.value?.dataSource?.invalidate()
+    }
+
     fun observeError() = dataSourceFactory.mutableDataSource.value?.errorMutable
     fun observeMutableCoinItemList() = coinRankingList
 }

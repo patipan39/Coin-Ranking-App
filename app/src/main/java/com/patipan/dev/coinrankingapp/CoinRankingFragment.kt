@@ -30,10 +30,21 @@ class CoinRankingFragment : BaseFragment() {
         super.onViewCreated(view, savedInstanceState)
         observeLiveData()
         setUpRecyclerView()
+        setUpSwipeRefresh()
+    }
+
+    private fun setUpSwipeRefresh() {
+        coinRankingSwipeRefreshing.setOnRefreshListener {
+            val isRefreshing = coinRankingSwipeRefreshing.isRefreshing
+            setEnableSwipeRefreshing(isRefreshing)
+        }
     }
 
     private fun observeLiveData() {
         coinRankingViewModel.observeMutableCoinItemList().observe(viewLifecycleOwner, Observer {
+            val isRefreshing = coinRankingSwipeRefreshing.isRefreshing
+            setEnableSwipeRefreshing(isRefreshing)
+
             coinRankingListAdapter.addAllItem(it)
         })
 
@@ -48,6 +59,10 @@ class CoinRankingFragment : BaseFragment() {
             itemAnimator = DefaultItemAnimator()
             adapter = coinRankingListAdapter
         }
+    }
+
+    private fun setEnableSwipeRefreshing(isRefreshing: Boolean) {
+        if (isRefreshing) coinRankingSwipeRefreshing.isRefreshing = !isRefreshing
     }
 
     companion object {
