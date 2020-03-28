@@ -22,6 +22,7 @@ class CoinRankingViewModel(
         val config = PagedList.Config.Builder()
             .setPageSize(pageSize)
             .setInitialLoadSizeHint(pageSize * 2)
+            .setEnablePlaceholders(true)
             .build()
 
         coinRankingRequest = CoinRankingRequest(page = 0)
