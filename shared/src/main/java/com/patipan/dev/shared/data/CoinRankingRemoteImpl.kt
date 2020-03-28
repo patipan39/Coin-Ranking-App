@@ -10,6 +10,6 @@ import com.patipan.dev.shared.service.CoinRankingService
 
 class CoinRankingRemoteImpl(private val service: CoinRankingService) : ICoinRankingRemote {
     override suspend fun getListCoinRanking(coinRangingRequest: CoinRankingRequest): Either<Failed, CoinRankingResponse> {
-        return request(service.getListCoinRanking(page = coinRangingRequest.page), { it }, CoinRankingResponse())
+        return request(service.getListCoinRanking(searchPrefix = coinRangingRequest.searchInList,page = coinRangingRequest.page), { it }, CoinRankingResponse())
     }
 }

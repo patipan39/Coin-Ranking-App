@@ -32,10 +32,13 @@ class CoinRankingDataSource(
                             coinData
                         )
                     }
+
+                    coinRankingRequest.page = state?.offset?.plus(1)?.toLong()
+
                     callback.onResult(
                         coinRankingListItem,
                         state?.offset?.minus(1)?.toLong(),
-                        coinRankingRequest.page?.plus(1)
+                        coinRankingRequest.page
                     )
                 }
 
@@ -51,10 +54,10 @@ class CoinRankingDataSource(
         callback: LoadCallback<Long, BaseCoinRankingAdapterData>
     ) {
         runBlocking {
-            coinRankingRequest.page = coinRankingRequest.page?.plus(1)
             return@runBlocking when (val response = useCase.run(coinRankingRequest)) {
                 is Either.Right -> {
                     val state = response.right.data?.state
+                    coinRankingRequest.page = state?.offset?.plus(1)?.toLong()
                     if (coinRankingRequest.page?.toInt() ?: 0 >= state?.limit ?: 0) return@runBlocking
 
                     response.right.data?.coin?.mapIndexed { index, coinData ->
@@ -65,7 +68,7 @@ class CoinRankingDataSource(
                     }
                     callback.onResult(
                         coinRankingListItem,
-                        state?.offset?.minus(1)?.toLong()
+                        state?.offset?.plus(1)?.toLong()
                     )
                 }
 
