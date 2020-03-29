@@ -1,5 +1,6 @@
 package com.patipan.dev.coinrankingapp.view
 
+import android.graphics.Rect
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -34,7 +35,6 @@ class CoinRankingFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         observeLiveData()
         setUpRecyclerView()
         setUpSwipeRefresh()
@@ -52,7 +52,10 @@ class CoinRankingFragment : BaseFragment() {
     private fun setUpSwipeRefresh() {
         coinRankingSwipeRefreshing.setOnRefreshListener {
             val isRefreshing = coinRankingSwipeRefreshing.isRefreshing
-            if (isRefreshing) coinRankingViewModel.refreshingData()
+            if (isRefreshing) {
+                coinRankingSearchEd.hideKeyBoard()
+                coinRankingViewModel.refreshingData()
+            }
         }
     }
 
@@ -76,7 +79,7 @@ class CoinRankingFragment : BaseFragment() {
     private fun setUpSearchEditText() {
         val coinRankingEditText = coinRankingSearchTextInputLayout.editText ?: return
         coinRankingEditText.setOnEditorActionListener { _, actionId, _ ->
-            val wording = coinRankingSearchEd.text.toString()
+            val wording = coinRankingEditText.text.toString()
             coinRankingViewModel.searchCoinRanking(wording)
             coinRankingSearchEd.hideKeyBoard()
 
@@ -87,8 +90,17 @@ class CoinRankingFragment : BaseFragment() {
             coinRankingEditText.text.clear()
             coinRankingViewModel.searchCoinRanking(coinRankingEditText.text.toString())
         }
-    }
 
+        coinRankingParent.viewTreeObserver.addOnGlobalLayoutListener {
+            val rect = Rect()
+            coinRankingParent.getWindowVisibleDisplayFrame(rect)
+            val heightOriginal = coinRankingParent.rootView.height
+            val spaceKeyboard = heightOriginal - rect.bottom
+
+            // 0.15 ratio is perhaps enough to determine keypad height.
+            if (spaceKeyboard <= heightOriginal * 0.15 && coinRankingSearchEd.hasFocus()) coinRankingSearchEd.clearFocus()
+        }
+    }
 
     companion object {
         const val tagFragment: String = "coinRankingFragment"
