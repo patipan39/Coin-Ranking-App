@@ -20,13 +20,15 @@ object ServiceFactory {
     }
 
     private fun createOkHttpClient(): OkHttpClient {
-        return OkHttpClient.Builder()
+        val okHttpClient = OkHttpClient.Builder()
             .addInterceptor(createInterceptor())
-            .addNetworkInterceptor(StethoInterceptor())
             .connectTimeout(30, TimeUnit.SECONDS)
             .readTimeout(30, TimeUnit.SECONDS)
             .writeTimeout(30, TimeUnit.SECONDS)
-            .build()
+
+        if (BuildConfig.DEBUG) okHttpClient.addNetworkInterceptor(StethoInterceptor())
+
+        return okHttpClient.build()
     }
 
     private fun createInterceptor(): Interceptor {
