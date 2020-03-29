@@ -1,11 +1,10 @@
 package com.patipan.dev.shared
 
+import android.content.Context
 import android.util.Log
+import com.google.gson.Gson
 import com.google.gson.JsonSyntaxException
-import com.patipan.dev.model.ErrorApiException
-import com.patipan.dev.model.ErrorException
-import com.patipan.dev.model.Failed
-import com.patipan.dev.model.JsonParseError
+import com.patipan.dev.model.*
 import retrofit2.Call
 
 sealed class Either<out L, out R> {
@@ -23,10 +22,10 @@ sealed class Either<out L, out R> {
 
 
     fun fold(left: (L) -> Any, right: (R) -> Any): Any =
-            when (this) {
-                is Left -> (left)
-                is Right -> (right)
-            }
+        when (this) {
+            is Left -> (left)
+            is Right -> (right)
+        }
 }
 
 fun <T, R> request(call: Call<T>, transform: (T) -> R, default: T): Either<Failed, R> {
@@ -49,5 +48,26 @@ fun <T, R> request(call: Call<T>, transform: (T) -> R, default: T): Either<Faile
         }
     } catch (exception: Throwable) {
         Either.Left(ErrorException(exception, -101))
+    }
+}
+
+fun Failed.mapperError(): FailedError {
+    return when (this) {
+        is ErrorApiException -> {
+            val jsonStr = Gson().toJson(this.errorResponse)
+            Gson().fromJson(jsonStr, FailedError::class.java)
+        }
+
+        is JsonParseError -> {
+            FailedError(this.code, this.throwable?.message)
+        }
+
+        is ErrorException -> {
+            FailedError(this.code, this.error?.message)
+        }
+
+        else -> {
+            FailedError(-101, "Not Found")
+        }
     }
 }

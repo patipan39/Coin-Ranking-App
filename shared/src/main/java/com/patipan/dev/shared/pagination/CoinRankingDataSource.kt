@@ -10,12 +10,11 @@ import kotlin.math.abs
 
 class CoinRankingDataSource(
     private val useCase: CoinRankingUseCase,
-    private val coinRankingRequest: CoinRankingRequest
+    private val coinRankingRequest: CoinRankingRequest,private val errorDataSource: ((error: Failed) -> Unit)
 ) :
     PageKeyedDataSource<Long, BaseCoinRankingAdapterData>() {
 
     private val coinRankingListItem = arrayListOf<BaseCoinRankingAdapterData>()
-    val errorMutable: MutableLiveData<Failed> = MutableLiveData()
 
     override fun loadInitial(
         params: LoadInitialParams<Long>,
@@ -43,7 +42,7 @@ class CoinRankingDataSource(
                 }
 
                 is Either.Left -> {
-                    errorMutable.postValue(response.left)
+                    errorDataSource(response.left)
                 }
             }
         }
@@ -75,7 +74,7 @@ class CoinRankingDataSource(
                 }
 
                 is Either.Left -> {
-                    errorMutable.postValue(response.left)
+                    errorDataSource(response.left)
                 }
             }
         }

@@ -1,9 +1,10 @@
 package com.patipan.dev.shared.pagination
 
-import androidx.lifecycle.MutableLiveData
 import androidx.paging.DataSource
 import com.patipan.dev.model.BaseCoinRankingAdapterData
 import com.patipan.dev.model.CoinRankingRequest
+import com.patipan.dev.model.Failed
+import com.patipan.dev.shared.SingleLiveEvent
 import com.patipan.dev.shared.domain.CoinRankingUseCase
 
 class CoinRankingDataSourceFactory(
@@ -12,11 +13,12 @@ class CoinRankingDataSourceFactory(
 ) :
     DataSource.Factory<Long, BaseCoinRankingAdapterData>() {
 
-    val mutableDataSource: MutableLiveData<CoinRankingDataSource> = MutableLiveData()
+    val singleErrorDataSource: SingleLiveEvent<Failed> = SingleLiveEvent()
+
     override fun create(): DataSource<Long, BaseCoinRankingAdapterData> {
-        val coinRankingDataSource = CoinRankingDataSource(useCase, coinRankingRequest)
-        mutableDataSource.postValue(coinRankingDataSource)
-        return coinRankingDataSource
+        return CoinRankingDataSource(useCase, coinRankingRequest) {
+            singleErrorDataSource.postValue(it)
+        }
     }
 
 }
