@@ -2,4 +2,5 @@
     <string name="app_name">CoinRankingApp</string>
     <string name="app_name_staging">CoinRankingAppStaging</string>
     <string name="coin_ranking_search_hint">ค้นหา</string>
+    <string name="coin_ranking_empty">-</string>
 </resources>
