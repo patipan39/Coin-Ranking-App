@@ -17,6 +17,7 @@ import com.patipan.dev.coinrankingapp.base.BaseFragment
 import com.patipan.dev.coinrankingapp.view.viewmodel.CoinRankingViewModel
 import com.patipan.dev.shared.mapperError
 import kotlinx.android.synthetic.main.coin_ranking_fragment.*
+import net.yslibrary.android.keyboardvisibilityevent.KeyboardVisibilityEvent
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -39,6 +40,7 @@ class CoinRankingFragment : BaseFragment() {
         setUpRecyclerView()
         setUpSwipeRefresh()
         setUpSearchEditText()
+        setUpKeyBoardListener()
     }
 
     private fun setUpRecyclerView() {
@@ -81,7 +83,7 @@ class CoinRankingFragment : BaseFragment() {
         coinRankingEditText.setOnEditorActionListener { _, actionId, _ ->
             val wording = coinRankingEditText.text.toString()
             coinRankingViewModel.searchCoinRanking(wording)
-            coinRankingSearchEd.hideKeyBoard()
+            coinRankingEditText.hideKeyBoard()
 
             actionId == EditorInfo.IME_ACTION_SEARCH
         }
@@ -91,14 +93,11 @@ class CoinRankingFragment : BaseFragment() {
             coinRankingViewModel.searchCoinRanking(coinRankingEditText.text.toString())
         }
 
-        coinRankingParent.viewTreeObserver.addOnGlobalLayoutListener {
-            val rect = Rect()
-            coinRankingParent.getWindowVisibleDisplayFrame(rect)
-            val heightOriginal = coinRankingParent.rootView.height
-            val spaceKeyboard = heightOriginal - rect.bottom
+    }
 
-            // 0.15 ratio is perhaps enough to determine keypad height.
-            if (spaceKeyboard <= heightOriginal * 0.15 && coinRankingSearchEd.hasFocus()) coinRankingSearchEd.clearFocus()
+    private fun setUpKeyBoardListener() {
+        KeyboardVisibilityEvent.setEventListener(activity ?: return) { isOpen ->
+            if (isOpen) coinRankingSearchTextInputLayout.requestFocus() else coinRankingSearchTextInputLayout.clearFocus()
         }
     }
 
