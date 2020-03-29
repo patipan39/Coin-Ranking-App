@@ -41,6 +41,6 @@ class CoinRankingViewModel(
         coinRankingList.value?.dataSource?.invalidate()
     }
 
-    fun observeError() = dataSourceFactory.mutableDataSource.value?.errorMutable
+    fun observeError() = dataSourceFactory.singleErrorDataSource
     fun observeMutableCoinItemList() = coinRankingList
 }

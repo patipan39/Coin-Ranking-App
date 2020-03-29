@@ -14,6 +14,7 @@ import com.patipan.dev.coinrankingapp.R
 import com.patipan.dev.coinrankingapp.adapter.CoinRankingListAdapter
 import com.patipan.dev.coinrankingapp.base.BaseFragment
 import com.patipan.dev.coinrankingapp.view.viewmodel.CoinRankingViewModel
+import com.patipan.dev.shared.mapperError
 import kotlinx.android.synthetic.main.coin_ranking_fragment.*
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -61,8 +62,10 @@ class CoinRankingFragment : BaseFragment() {
             coinRankingListAdapter.addAllItem(it)
         })
 
-        coinRankingViewModel.observeError()?.observe(viewLifecycleOwner, Observer {
-            Toast.makeText(context, it.throwable?.message.toString(), Toast.LENGTH_LONG).show()
+        coinRankingViewModel.observeError().observe(viewLifecycleOwner, Observer {
+            setEnableSwipeRefreshing(coinRankingSwipeRefreshing.isRefreshing)
+            val (code, errorMessage) = it.mapperError()
+            Toast.makeText(context, "$code : $errorMessage", Toast.LENGTH_LONG).show()
         })
     }
 
@@ -71,12 +74,18 @@ class CoinRankingFragment : BaseFragment() {
     }
 
     private fun setUpSearchEditText() {
-        coinRankingSearchEd.setOnEditorActionListener { _, actionId, _ ->
+        val coinRankingEditText = coinRankingSearchTextInputLayout.editText ?: return
+        coinRankingEditText.setOnEditorActionListener { _, actionId, _ ->
             val wording = coinRankingSearchEd.text.toString()
             coinRankingViewModel.searchCoinRanking(wording)
             coinRankingSearchEd.hideKeyBoard()
 
             actionId == EditorInfo.IME_ACTION_SEARCH
+        }
+
+        coinRankingSearchTextInputLayout.setEndIconOnClickListener { _ ->
+            coinRankingEditText.text.clear()
+            coinRankingViewModel.searchCoinRanking(coinRankingEditText.text.toString())
         }
     }
 

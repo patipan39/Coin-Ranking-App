@@ -14,7 +14,7 @@ data class CoinRankingResponseData(
 )
 
 data class CoinRankingResponseDataState(
-    @SerializedName("total") val total: Long? = null,
+    @SerializedName("total") val total: Double? = null,
     @SerializedName("offset") val offset: Int? = null,
     @SerializedName("limit") val limit: Int? = null,
     @SerializedName("order") val order: String? = null,
@@ -47,13 +47,13 @@ data class CoinRankingResponseDataCoin(
     @SerializedName("numberOfMarkets") val numberOfMarkets: Double? = null,
     @SerializedName("numberOfExchanges") val numberOfExchanges: Double? = null,
     @SerializedName("type") val type: String? = null,
-    @SerializedName("volume") val volume: Long? = null,
-    @SerializedName("marketCap") val marketCap: Long? = null,
+    @SerializedName("volume") val volume: Double? = null,
+    @SerializedName("marketCap") val marketCap: Double? = null,
     @SerializedName("price") val price: String? = null,
     @SerializedName("circulatingSupply") val circulatingSupply: Double? = null,
     @SerializedName("totalSupply") val totalSupply: Double? = null,
     @SerializedName("approvedSupply") val approveSupply: Boolean? = null,
-    @SerializedName("firstSeen") val firstSeen: Long? = null,
+    @SerializedName("firstSeen") val firstSeen: Double? = null,
     @SerializedName("change") val change: Double? = null,
     @SerializedName("rank") val ranking: Int? = null,
     @SerializedName("history") val history: ArrayList<String>? = null,
