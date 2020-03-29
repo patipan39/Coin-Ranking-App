@@ -86,8 +86,8 @@ class CoinRankingListAdapter :
                     coinRankingLeftIcon
                 )
 
-                coinRankingLeftTitle.text = itemLeft.name
-                coinRankingLeftDescription.text = itemLeft.description
+                coinRankingLeftTitle.text = itemLeft.name ?: context.getString(R.string.coin_ranking_empty)
+                coinRankingLeftDescription.text = itemLeft.description ?: context.getString(R.string.coin_ranking_empty)
             }
         }
     }
